@@ -1,0 +1,646 @@
+import webbrowser
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PRIVATE — DO NOT READ</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: #171313;
+        color: #e8dfd3;
+        font-family: Georgia, "Times New Roman", serif;
+        line-height: 1.7;
+    }
+
+    /* MAIN CONTAINER */
+
+    .container {
+        width: 90%;
+        max-width: 950px;
+        margin: auto;
+        padding: 60px 0;
+    }
+
+    /* HEADER */
+
+    header {
+        min-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 40px 20px;
+        border-bottom: 1px solid #514743;
+    }
+
+    .warning {
+        color: #9e3737;
+        letter-spacing: 5px;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        margin-bottom: 25px;
+        text-transform: uppercase;
+    }
+
+    h1 {
+        font-family: Georgia, serif;
+        font-size: clamp(45px, 8vw, 90px);
+        letter-spacing: 8px;
+        color: #eee6db;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        font-size: 20px;
+        font-style: italic;
+        color: #a99c91;
+        margin-bottom: 50px;
+    }
+
+    .intro {
+        max-width: 650px;
+        font-size: 18px;
+        color: #d5cbc0;
+    }
+
+    .intro strong {
+        color: #b84a4a;
+    }
+
+    .scroll {
+        margin-top: 60px;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        letter-spacing: 3px;
+        color: #887b72;
+    }
+
+    /* JOURNAL */
+
+    .journal {
+        padding-top: 80px;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 35px;
+        letter-spacing: 3px;
+        margin-bottom: 15px;
+    }
+
+    .section-subtitle {
+        text-align: center;
+        color: #91847b;
+        font-style: italic;
+        margin-bottom: 60px;
+    }
+
+    /* ENTRY */
+
+    .entry {
+        background: #211c1b;
+        border: 1px solid #443b37;
+        margin-bottom: 25px;
+        transition: 0.3s ease;
+    }
+
+    .entry:hover {
+        border-color: #765f56;
+        transform: translateY(-2px);
+    }
+
+    .entry-header {
+        padding: 25px 30px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .date {
+        font-family: Arial, sans-serif;
+        letter-spacing: 3px;
+        font-size: 13px;
+        color: #b84a4a;
+        text-transform: uppercase;
+    }
+
+    .arrow {
+        font-size: 20px;
+        color: #8e8178;
+        transition: 0.3s;
+    }
+
+    .entry-content {
+        display: none;
+        padding: 0 35px 35px 35px;
+        color: #d4c9bd;
+        font-size: 17px;
+        border-top: 1px solid #39312e;
+    }
+
+    .entry-content p {
+        margin-top: 25px;
+    }
+
+    .entry.open .entry-content {
+        display: block;
+    }
+
+    .entry.open .arrow {
+        transform: rotate(180deg);
+        color: #b84a4a;
+    }
+
+    /* QUOTE */
+
+    .quote {
+        margin: 35px 0;
+        padding: 25px;
+        border-left: 3px solid #9e3737;
+        color: #b8aaa0;
+        font-style: italic;
+        background: #1b1716;
+    }
+
+    /* FINAL SECTION */
+
+    .connection {
+        margin-top: 100px;
+        padding: 60px 30px;
+        text-align: center;
+        border-top: 1px solid #514743;
+        border-bottom: 1px solid #514743;
+    }
+
+    .connection h2 {
+        font-size: 30px;
+        margin-bottom: 20px;
+    }
+
+    .connection p {
+        max-width: 600px;
+        margin: auto;
+        color: #aaa098;
+    }
+
+    .button {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 13px 28px;
+        border: 1px solid #9e3737;
+        color: #d9cbc0;
+        text-decoration: none;
+        letter-spacing: 2px;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        transition: 0.3s;
+    }
+
+    .button:hover {
+        background: #9e3737;
+        color: white;
+    }
+
+    /* FOOTER */
+
+    footer {
+        text-align: center;
+        padding: 60px 20px;
+        color: #625952;
+        font-family: Arial, sans-serif;
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 600px) {
+
+        .container {
+            width: 94%;
+        }
+
+        header {
+            min-height: 80vh;
+        }
+
+        h1 {
+            letter-spacing: 4px;
+        }
+
+        .intro {
+            font-size: 16px;
+        }
+
+        .entry-header {
+            padding: 20px;
+        }
+
+        .entry-content {
+            padding: 0 22px 25px 22px;
+            font-size: 16px;
+        }
+    }
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="warning">PRIVATE DOCUMENT</div>
+
+    <h1>PRIVATE — DO NOT READ</h1>
+
+    <div class="subtitle">
+        The journal of Augustine
+    </div>
+
+    <div class="intro">
+
+        <p><strong>If you are reading this, you probably shouldn't be.</strong></p>
+
+        <br>
+
+        <p>
+            December 24 was supposed to be a normal Christmas.
+        </p>
+
+        <p>
+            It wasn't.
+        </p>
+
+        <p>
+            Marcel was found dead. We are trapped in the house.
+            Everyone is hiding something, and I don't know who I can trust.
+        </p>
+
+        <p>
+            These are my thoughts from those three days.
+        </p>
+
+        <br>
+
+        <p>
+            <em>I just hope I didn't write down too much.</em>
+        </p>
+
+    </div>
+
+    <div class="scroll">
+        ↓ READ THE JOURNAL ↓
+    </div>
+
+</header>
+
+
+<div class="container">
+
+<section class="journal">
+
+    <h2 class="section-title">THE JOURNAL</h2>
+
+    <p class="section-subtitle">
+        December 24 — December 26
+    </p>
+
+
+    <!-- ENTRY 1 -->
+
+    <div class="entry">
+
+        <div class="entry-header" onclick="toggleEntry(this)">
+            <span class="date">December 24</span>
+            <span class="arrow">↓</span>
+        </div>
+
+        <div class="entry-content">
+
+            <p>
+                Everything was supposed to be normal today.
+                We were all together for Christmas, but honestly,
+                something felt strange from the beginning.
+                Everyone was acting weird and I could tell there
+                was something going on.
+            </p>
+
+            <p>
+                Then we found Marcel dead in his room.
+                I still cannot believe it.
+                How can someone die in a house full of people?
+            </p>
+
+            <p>
+                The worst part is that nobody can leave.
+                The doors are locked and there is no phone.
+                We are all trapped here.
+                And now everyone is suspicious of everyone.
+            </p>
+
+            <div class="quote">
+                "I don't know who I can trust anymore."
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ENTRY 2 -->
+
+    <div class="entry">
+
+        <div class="entry-header" onclick="toggleEntry(this)">
+            <span class="date">December 24 — Later</span>
+            <span class="arrow">↓</span>
+        </div>
+
+        <div class="entry-content">
+
+            <p>
+                Everyone has a secret.
+                I always thought I was the one who was a little
+                different in this family, but now I see that I am
+                definitely not the only one.
+            </p>
+
+            <p>
+                We keep asking questions about Marcel, but every time
+                someone answers, another secret comes out.
+                It is honestly exhausting.
+                I feel like we are all lying to each other.
+            </p>
+
+            <p>
+                And then there is Gaby.
+                She acts like she knows more than she says.
+                I don't trust her at all.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ENTRY 3 -->
+
+    <div class="entry">
+
+        <div class="entry-header" onclick="toggleEntry(this)">
+            <span class="date">December 24 — Night</span>
+            <span class="arrow">↓</span>
+        </div>
+
+        <div class="entry-content">
+
+            <p>
+                Things are getting worse.
+                We found out that Marcel had secrets with almost everyone.
+                It is crazy to think that he was living with us while
+                having all these different relationships.
+            </p>
+
+            <p>
+                I am starting to wonder if any of us really knew him.
+            </p>
+
+            <p>
+                I also feel like nobody takes me seriously.
+                Maybe because I am always emotional and dramatic,
+                but that doesn't mean I am stupid.
+                I notice things too.
+            </p>
+
+            <div class="quote">
+                "I just wish someone would tell me the truth."
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ENTRY 4 -->
+
+    <div class="entry">
+
+        <div class="entry-header" onclick="toggleEntry(this)">
+            <span class="date">December 25</span>
+            <span class="arrow">↓</span>
+        </div>
+
+        <div class="entry-content">
+
+            <p>
+                I can't believe how much has happened in one day.
+                There have been so many accusations and arguments.
+                Everyone is angry, and nobody knows what to believe.
+            </p>
+
+            <p>
+                For a moment, I thought maybe I was going crazy.
+                But then I realized that everyone else is just as
+                confused as me.
+            </p>
+
+            <p>
+                I keep thinking about Marcel.
+                Was he really the person we thought he was?
+                Maybe he wasn't innocent at all.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ENTRY 5 -->
+
+    <div class="entry">
+
+        <div class="entry-header" onclick="toggleEntry(this)">
+            <span class="date">December 25 — Later</span>
+            <span class="arrow">↓</span>
+        </div>
+
+        <div class="entry-content">
+
+            <p>
+                More secrets came out today.
+                It feels like every time someone opens their mouth,
+                everything becomes even more complicated.
+            </p>
+
+            <p>
+                I am scared, but I am also angry.
+                Why did Marcel have to hide so many things?
+                Why did everyone hide things too?
+            </p>
+
+            <p>
+                Maybe this whole family has been pretending to be
+                happy for years.
+            </p>
+
+            <div class="quote">
+                "I don't think we can go back to normal after this."
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ENTRY 6 -->
+
+    <div class="entry">
+
+        <div class="entry-header" onclick="toggleEntry(this)">
+            <span class="date">December 25 — Night</span>
+            <span class="arrow">↓</span>
+        </div>
+
+        <div class="entry-content">
+
+            <p>
+                We finally started understanding what really happened.
+                There were so many lies that it was almost impossible
+                to find the truth.
+            </p>
+
+            <p>
+                I thought the murderer was someone else,
+                but now I don't even know what to think.
+            </p>
+
+            <p>
+                The strangest thing is that the people I trusted the
+                most were not always telling the truth.
+            </p>
+
+            <div class="quote">
+                "Maybe nobody in this house is completely innocent."
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ENTRY 7 -->
+
+    <div class="entry">
+
+        <div class="entry-header" onclick="toggleEntry(this)">
+            <span class="date">December 26</span>
+            <span class="arrow">↓</span>
+        </div>
+
+        <div class="entry-content">
+
+            <p>
+                Everything is finally coming out.
+                I don't even know how to feel anymore.
+                I'm tired, confused and honestly a little embarrassed
+                by everything that happened.
+            </p>
+
+            <p>
+                But I also feel like I understand my family better now.
+                We all have secrets, even the people who pretend they don't.
+            </p>
+
+            <p>
+                This Christmas was definitely not what I expected.
+            </p>
+
+            <div class="quote">
+                "I just hope that when I look back at this one day,
+                it will feel like a bad dream."
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TRANSMEDIA CONNECTION -->
+
+    <section class="connection">
+
+        <h2>THERE IS MORE TO THE STORY.</h2>
+
+        <p>
+            Augustine may have written down what she remembers,
+            but not everything in this house can be found in a diary.
+        </p>
+
+        <p>
+            Somewhere else, another part of the story is waiting.
+        </p>
+
+        <!--
+        WHEN YOU GET THE LINK FROM THE OTHER GROUP,
+        REPLACE # WITH THEIR URL.
+        -->
+
+        <a class="button" href="#" target="_blank">
+            DISCOVER MORE →
+        </a>
+
+    </section>
+
+</section>
+
+</div>
+
+
+<footer>
+
+    AUGUSTINE'S PRIVATE JOURNAL
+    <br><br>
+    EIGHT WOMEN — TRANSMEDIA PROJECT
+
+</footer>
+
+
+<script>
+
+function toggleEntry(header) {
+
+    const entry = header.parentElement;
+
+    entry.classList.toggle("open");
+
+}
+
+</script>
+
+</body>
+</html>
+'''
+
+# Create the HTML file
+file_path = Path("augustine_private_journal.html")
+file_path.write_text(html, encoding="utf-8")
+
+# Open it automatically in your browser
+webbrowser.open(file_path.resolve().as_uri())
+
+print("Your Augustine website has been created!")
+print("File:", file_path.resolve())
